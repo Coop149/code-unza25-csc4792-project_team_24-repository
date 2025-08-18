@@ -74,3 +74,44 @@
 
 6. **Usable Output**
     The final system should produce a **searchable, categorized dataset or dashboard** for policymakers, researchers, and students, enabling instant filtering by Vision 2030 sector.
+
+
+
+# 2. Data Undestanding
+
+
+We successfully loaded the dataset vision_2030_dataset - unza_journal_articles.csv into a pandas DataFrame.  
+- The first 5 rows (df.head()) confirm that column names and sample data appear as expected.  
+- The dataset shape (df.shape) shows <number_of_rows> rows and <number_of_columns> columns, which matches our expectations.  
+
+Thus, the dataset is correctly loaded and ready for further exploration.
+
+## 2.4: Summary of Findings
+
+- **Dataset Size**: The dataset contains **124 rows** and **12 columns**.
+
+- **Missing Values / Inconsistencies**:
+  - Missing values are present in some columns (e.g., **sector** and **keywords**).
+  - Possible **duplicate titles or DOIs** exist.
+  - A few year entries may need to be checked for validity.
+
+- **Numerical Columns**:
+  - **Year**: Publications range mainly from **2014–2024**, showing growth in scholarly output in recent years.
+
+- **Categorical Columns**:
+  - **Sector**: Categories are **imbalanced** — most articles fall under *Education and Skills Development* and *Health*, while other Vision 2030 sectors are underrepresented.
+  - **Journal**: A small set of journals dominate; many appear only once.
+  - **Authors**: A few prolific authors publish repeatedly, but most appear just once.
+
+- **Potential Data Cleaning Needed**:
+  - Fill or drop missing values in **sector, and keywords**.
+  - Identify and remove **duplicates** in titles/DOIs.
+  - Consider grouping underrepresented **sectors** to balance categories.
+  - Normalize or transform **skewed numerical features** like citations.
+
+
+**Conclusion**:  
+The dataset is structured and ready for analysis, but **preprocessing** is necessary to address missing values, duplicates, imbalanced categories, and outliers. Once cleaned, the dataset will support reliable classification and trend analysis.
+
+
+
