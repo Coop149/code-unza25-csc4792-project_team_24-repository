@@ -15,7 +15,7 @@
 # 1. Business Understanding
 
  ## Problem Statement
- The University of Zambia publishes numerous scholarly articles across various disciplines, but there is no automated system to categorize these publications according to Zambia’s Vision  2030 sector classifications (e.g., Education, Health, Agriculture). This lack of classification makes it difficult for policymakers, researchers, and students to identify research   relevant to national development priorities quickly. Manually sorting articles is time-consuming and prone to human error, limiting the accessibility and impact of academic research.
+ The University of Zambia publishes numerous scholarly articles across various disciplines. Still, there is no automated system to categorize these publications according to Zambia’s Vision  2030 sector classifications (e.g., Education, Health, Agriculture). This lack of classification makes it difficult for policymakers, researchers, and students to quickly identify research relevant to national development priorities. Manually sorting articles is time-consuming and prone to human error, limiting the accessibility and impact of academic research.
 
 ## **Business Objectives**
 
@@ -24,7 +24,7 @@
    *(e.g., Education, Health, Agriculture)*.
 
 2. **Improve accessibility of academic research**  
-   Enable policymakers, researchers, and students to locate publications relevant to national development priorities quickly.
+   Enable policymakers, researchers, and students to quickly locate publications relevant to national development priorities.
 
 3. **Reduce manual workload & eliminate classification errors**  
    Provide a consistent, data-driven categorization process to replace human classification.
@@ -109,9 +109,128 @@ Thus, the dataset is correctly loaded and ready for further exploration.
   - Consider grouping underrepresented **sectors** to balance categories.
   - Normalize or transform **skewed numerical features** like citations.
 
+## 3. Data Preparation
 
-**Conclusion**:  
-The dataset is structured and ready for analysis, but **preprocessing** is necessary to address missing values, duplicates, imbalanced categories, and outliers. Once cleaned, the dataset will support reliable classification and trend analysis.
+### Cleaning
+- Removed duplicates  
+- Filled missing values  
+- Normalized sector labels  
+
+### Text Processing
+```python
+def clean_text_simple(text):
+    """
+    1. Convert to lowercase
+    2. Remove URLs, digits, punctuation
+    3. Tokenize & remove stopwords
+    4. Lemmatize words
+    5. Rejoin tokens
+    """
+```
+
+### Feature Engineering
+- Word counts (title, abstract, combined text)  
+- Keyword counts  
+- Year grouping (≤2009, 2010–2014, 2015–2019, 2020–2025)  
+- Multi-label parsing of sector labels  
+
+### Vectorization
+- **TF-IDF**: `max_features=5000, ngram_range=(1,2), min_df=2`  
+- 18 unique sector classes  
+
+---
+
+## 4. Modeling
+
+### Algorithms
+- **Multinomial Naive Bayes** – baseline text classifier  
+- **Logistic Regression** – robust for high-dimensional text  
+
+### Results
+| Model                     | Accuracy | Macro Avg F1 | Weighted Avg F1 |
+|----------------------------|----------|--------------|-----------------|
+| Multinomial Naive Bayes    | 30.4%    | 0.06         | 0.14            |
+| Logistic Regression        | 34.8%    | 0.11         | 0.22            |
+
+---
+
+## 5. Evaluation
+- Both models biased toward majority classes  
+- Minority sectors rarely classified correctly  
+- Severe **class imbalance** = critical limitation  
+
+---
+
+## 6. Deployment
+
+```python
+def predict_new_article(text):
+    """
+    1. Clean input
+    2. Apply TF-IDF transformation
+    3. Predict sector with trained model
+    4. Return predicted label
+    """
+```
+
+### Example Use Cases
+- Web dashboard for policymakers  
+- Batch classification of repositories  
+- REST API for integration  
+
+⚠ **Critical Limitation**: Current accuracy (35%) is insufficient for real-world deployment.  
+
+---
+
+## 7. Results & Discussion
+
+### Achievement vs. Objectives
+| Criterion         | Target | Achieved | Status |
+|-------------------|--------|----------|--------|
+| Accuracy          | ≥80%   | 35%      | ❌ |
+| Precision/Recall  | ≥75%   | ~20%     | ❌ |
+| Sector Coverage   | All    | Partial  | ⚠ |
+| Real-time         | Fast   | Fast     | ✅ |
+
+### Lessons Learned
+1. More data is essential for model performance  
+2. Severe imbalance must be addressed with balancing techniques  
+3. Advanced algorithms cannot substitute poor data quality  
+
+---
+
+## 8. Conclusions & Future Work
+
+- Completed full CRISP-DM pipeline  
+- Achieved limited results due to dataset constraints  
+
+### Future Improvements
+1. **Data**: Collect ≥100 articles per sector (balanced dataset)  
+2. **Preprocessing**: Apply SMOTE, class weighting, advanced cleaning  
+3. **Models**: Explore SVM, Random Forest, BERT-based transformers  
+4. **Evaluation**: Use stratified sampling, cross-validation, hyperparameter tuning  
+
+---
+
+## 9. Technical Appendix
+
+### Dependencies
+- pandas  
+- numpy  
+- scikit-learn  
+- nltk  
+- matplotlib  
+- seaborn  
+
+### Model Parameters
+```python
+TfidfVectorizer(max_features=5000, ngram_range=(1,2), min_df=2)
+LogisticRegression(max_iter=1000)
+MultinomialNB()
+```
+
+
+> **Note**: This project is an academic exploration. Current model performance is insufficient for production deployment but provides a foundation for future development.  
 
 
 
